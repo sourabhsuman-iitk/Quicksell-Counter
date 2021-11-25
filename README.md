@@ -2,7 +2,6 @@
 
 - The counter value is stored in **Firebase's Cloud Firestore** on every updation.
 - API call is made every time the page loads. This initialises the counter. If null counter initialises with 1.
-
   
 This project was bootstrapped with [Create React App](https://github.com/facebook/create-react-app).
 
