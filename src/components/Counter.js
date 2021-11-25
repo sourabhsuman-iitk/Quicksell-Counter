@@ -23,8 +23,9 @@ const getBaseURL = "https://interview-8e4c5-default-rtdb.firebaseio.com/front-en
 const Counter = () => {
     const[count,setCount] = useState(1)
     const[loading, setLoading] =useState(false)
+    const[limit, setLimit] =useState(false)
     const[edited, setEdited] =useState(null)
-    // const get=null
+    const MAX_VALUE=1000
 
     const countRef = db.collection('counter').doc('validCount');
     
@@ -72,12 +73,24 @@ const Counter = () => {
 
     useEffect(() => {
         getCall()
+        // eslint-disable-next-line
     }, [])
 
+    const validateForm = (e) => {
+        if(e.target.value!=='' && e.target.value<=MAX_VALUE){
+            setEdited(parseInt(e.target.value,10))
+            setCount(parseInt(e.target.value))
+            setLimit(false)
+        } 
+        else if(e.target.value>MAX_VALUE){
+            setLimit(true)
+        } 
+    }
     const onSubmit = (e) => {
         e.preventDefault()
-        if(edited!=='')
-        setCount(parseInt(edited,10))
+        if(edited!=='' && parseInt(edited)<=1000){
+             setLimit(false)
+        }
         setEdited('')
     }
 
@@ -93,8 +106,7 @@ const Counter = () => {
 
             <form onSubmit={onSubmit}>
                 <span id="label-form">Enter new counter value</span>
-                <input type="number" id="input-counter" placeholder="Counter" value={edited} onChange={(e)=> {setEdited(e.target.value)
-                setCount(e.target.value)}} /><br/>
+                <input type="number" id="input-counter" placeholder="Counter" value={edited} onChange={validateForm}/><br/>
                 <input id="submit-btn" type="submit" value="Save"/>
             </form>
 
@@ -103,16 +115,23 @@ const Counter = () => {
         <div className="container">
 
             <div className="loading-display">
-                { loading ? (null) : <>
+                {
+                    limit ? <><div id="loading-text">Max limit reached</div> </> :
+                    (null) 
+                }
+                { 
+                    loading ? (null) : <>
                     <Spinner />
                     <div id="loading-text">Saving counter value</div>
                     </>
                 }
+
             </div>
 
             <div className="button-wrapper">
                 <button id="left-button" onClick={() =>{
                     setCount(count - 1)
+                    setLimit(false)
                 }}><span>-</span>
                 </button>
 
@@ -124,8 +143,10 @@ const Counter = () => {
 
                 <button id="right-button" onClick={() =>{
 
-                    if(current<1000)
+                    if(current<MAX_VALUE)
                     setCount(count + 1)
+                    else
+                    setLimit(true)
 
                 }}><span>+</span>
                 </button>
