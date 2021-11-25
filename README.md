@@ -2,7 +2,10 @@
 
 - The counter value is stored in **Firebase's Cloud Firestore** on every updation.
 - API call is made every time the page loads. This initialises the counter. If null counter initialises with 1.
-  
+- Improved user interaction in latest update. 
+- Displays Maximum limit reached on entering or trying to enter anything greater than MAX_VALUE
+[Note: SamX191 is my local repository]  
+
 This project was bootstrapped with [Create React App](https://github.com/facebook/create-react-app).
 
 ## Available Scripts
